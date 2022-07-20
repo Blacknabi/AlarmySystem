@@ -2,7 +2,7 @@
 
 import os, sys, platform
 import time, datetime
-import schedule, winsound
+import schedule, playsound
 
 def aficheMeni():
     print('')
@@ -30,7 +30,6 @@ def rekipereAntre():
 
 def redemare():
     if platform.system()=='Windows':
-        
         print(f'Machin ou an pral redemare nan kek segonn.')
         os.system(f"shutdown /r /t 1")
     else:
@@ -59,12 +58,13 @@ def alarm(set_alarm_timer):
         print(now)
         if now == set_alarm_timer:
             print("Time to Wake up")
-        winsound.PlaySound("sound.wav",winsound.SND_ASYNC)
-        break
+            playsound.playsound(son)
+            break
 
 def actual_time():
-    global h, mn 
+    global h, mn, son 
     lh = input("Antre lh a nan foma HH:MM : ")
+    son = input("Antre chemen mizik ou vle a. Eg: <C:/Users/JRJC/Music/aaa.m4a>")
     h, mn = lh.split(":")
     set_alarm_timer = f"{h}:{mn}"
     alarm(set_alarm_timer)
