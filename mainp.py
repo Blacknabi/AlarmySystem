@@ -1,10 +1,13 @@
 #coding : UTF-8
 
-
-import os, sys, platform
+import multiprocessing
+import os
+import sys
+import threading
+import platform
 import time, datetime
-from turtle import color
-import schedule, playsound
+import schedule
+from playsound import playsound
 
 os.system('color e')
 # os.system('title Alarmy System ')
@@ -81,7 +84,9 @@ def femen():
         print("Dezole. Pwosesis are otomatik la echwe.")
      
                    
-def alarm(ajiste_alam):
+def alarm(ajiste_alam, **kwargs):
+    lh = kwargs.get('lh')
+    mn = kwargs.get('mn')
     while True:
         time.sleep(1.2)
         lh_kounyea = datetime.datetime.now()
@@ -89,26 +94,31 @@ def alarm(ajiste_alam):
         dat = lh_kounyea.strftime("%d/%m/%Y")
         print(f"{dat}")
         print(f"- - - - - {kounya} - - - - - ")
-        if kounya == ajiste_alam:
-            try:
-                os.system('color a')
-                print("Alam lanse...")
-                # playsound.playsound(son)
-                break
-            except:
-                os.system('color c')
-                print("Alam nan pa rive lanse !")
+        if kounya == f"{lh}:{mn}":
+            son = "C:/Users/JRJC/Music/aaa.m4a"
+            p = multiprocessing.Process(target=playsound, args=(son, ))
+            p.start()
+            a = input("Peze ENTER pou kanpe")
+            if not a:
+                p.terminate()
                 break
 
 
 
 def done_alam():
-    global h, mn, son
+    # global h, mn, son
     print('|----------------------------------------------------|')
     print('|              ::: PWOGRAME YON ALAM :::             |')
     print('|----------------------------------------------------|')
     print("|                    Itilize foma  24H               |")
     print('|----------------------------------------------------|')
+    
+    # son = input("Antre chemen son ou vle alam nan jwe a. Eg: <C:/Users/JRJC/Music/aaa.m4a>")
+    # son = "C:/Users/JRJC/Music/aaa.m4a"
+    # while not son:
+    #     son = input("Antre chemen son ou vle alam nan jwe a. Eg: <C:/Users/JRJC/Music/aaa.m4a>")
+    #     son = "C:/Users/JRJC/Music/aaa.m4a"
+    
     lh = input("Tape lh a : ")
     while not lh.isdigit():
         lh = input("Retape lh a : ") 
@@ -135,10 +145,14 @@ def done_alam():
     time.sleep(0.9)
     print(f"Ou pwograme yon alam pou {lh} : {mn} ")
     
-    son = input("Antre chemen son alam nan. Eg: <C:/Users/JRJC/Music/aaa.m4a>")
+    if lh < 10:
+        lh = "0" + str(lh)
+    
+    if mn < 10:
+        mn = "0" + str(mn)
     
     ajiste_alam = f"{lh}:{mn}"
-    alarm(ajiste_alam)
+    alarm(ajiste_alam, lh=lh, mn=mn)
 
 
 
@@ -146,14 +160,14 @@ def done_alam():
 
 #---------------------------MAIN---------------------------
 
+if __name__ == "__main__":
+    antre = aficheMeni()
 
-antre = aficheMeni()
-
-if antre == 'R' or antre == 'r':
-    redemare()
-elif antre == 'F' or antre == 'f':
-    femen()
-elif antre == 'A' or antre == 'a':
-    done_alam()
-else:
-    kite()
+    if antre == 'R' or antre == 'r':
+        redemare()
+    elif antre == 'F' or antre == 'f':
+        femen()
+    elif antre == 'A' or antre == 'a':
+        done_alam()
+    else:
+        kite()
